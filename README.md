@@ -62,7 +62,7 @@ PORT=8000
 
 ```bash
 npm install
-node src/server.js
+npm start
 ```
 
 启动后默认监听：
@@ -72,6 +72,24 @@ http://127.0.0.1:8000
 ```
 
 如果你修改了 `.env` 中的 `PORT`，请按对应端口访问。
+
+## 部署到 Vercel
+
+本项目已适配 Vercel：
+
+- 本地开发仍通过 `src/server.js` 启动并监听 `PORT`
+- Vercel 线上通过根目录 `index.js` 导出 Express app
+- Vercel 部署时不需要手动设置监听端口
+
+在 Vercel 项目中配置以下环境变量：
+
+| 变量 | 必填 | 说明 |
+|---|---|---|
+| `UPSTREAM_BASE_URL` | 是 | 上游接口基础地址 |
+| `UPSTREAM_API_KEY` | 是 | 上游 Bearer Token |
+| `AUTH_TOKENS` | 否 | 客户端访问令牌，多个值用英文逗号分隔 |
+
+说明：`PORT` 仅用于本地开发，Vercel 线上无需设置。
 
 ## 可用接口
 
@@ -127,9 +145,3 @@ POST /messages
 - 不包含管理后台和 YAML 配置系统
 - `.env` 中通常包含真实密钥，请勿提交到版本库
 - 如果端口被占用，请修改 `PORT` 后重新启动
-
-## 适用场景
-
-- 需要在本地或内网代理上游 LLM 接口
-- 希望在特定测试环境下，对拒绝响应做自动重试处理
-- 希望以 Node.js 版本替代原有 Python 版中继服务
